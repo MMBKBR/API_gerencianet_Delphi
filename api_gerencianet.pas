@@ -5,25 +5,28 @@ interface
 uses SynCrtSock, superobject;
 
 Type
-  /// <summary>   Classe que pega o token de autorização (Oauth) </summary>
+  /// <summary>   Classe base, pega o token de autorização (Oauth) e tem o metodo request para comunicar com o servidor da gerencianet </summary>
   TApi_gerencianet_autorizacao = class
   private
     fclient_id:string;
     fclient_secret:string;
+    fServidor:string;
+    function request(metodo, url, body:string; out outContent:string):integer;
   public
     function obter_token_autorizacao:string;
-    constructor create(client_id, client_secret:string);
+    constructor create(client_id, client_secret:string; ambiente_teste:boolean = false);
+  end;
+
+  TApi_gerencianet_transacao = class(TApi_gerencianet_autorizacao)
+  private
+  public
+    function criar(lst_transacao:ISuperObject; out HTTP_code:integer):string;
   end;
 
 implementation
 
 { TApi_gerencianet_autorizacao }
 
-constructor TApi_gerencianet_autorizacao.create(client_id, client_secret: string);
-begin
-  fclient_id:=client_id;
-  fclient_secret:=client_secret;
-end;
 
 function TApi_gerencianet_autorizacao.obter_token_autorizacao: string;
 var
@@ -34,7 +37,7 @@ var
 begin
   auth:='Authorization:Basic ';
   auth:=auth+Base64Encode(fclient_id+':'+fclient_secret);
-  http_client := TWinHttp.Create('sandbox.gerencianet.com.br', '443', true);
+  http_client := TWinHttp.Create(fServidor, '443', true);
   try
     code:=http_client.Request('/v1/authorize', 'post', 10, auth,'{"grant_type":"client_credentials"}', 'application/json', outHeader, outContent);
     jContent:=SO(outContent);
@@ -45,6 +48,43 @@ begin
   finally
     http_client.Free;
   end;
+end;
+
+{ TApi_gerencianet_comun }
+
+constructor TApi_gerencianet_autorizacao.create(client_id, client_secret: string; ambiente_teste:boolean = false);
+begin
+  fclient_id:=client_id;
+  fclient_secret:=client_secret;
+  if ambiente_teste then
+    fServidor:= 'sandbox.gerencianet.com.br'
+  else
+    fServidor:= ' api.gerencianet.com.br';
+end;
+
+
+function TApi_gerencianet_autorizacao.request(metodo, url, body: string; out outContent: string): integer;
+var
+  http_client: TWinHttp;
+  outHeader, inHeader:SockString;
+  outc:SockString;
+  jContent:ISuperObject;
+begin
+  inHeader:='Authorization:'+obter_token_autorizacao;
+  http_client := TWinHttp.Create(fServidor, '443', true);
+  try
+    Result:=http_client.Request(url, metodo, 10, inHeader, body, 'application/json', outHeader, outc);
+    outContent:=outc;
+  finally
+    http_client.Free;
+  end;
+end;
+
+{ TApi_gerencianet_transacao }
+
+function TApi_gerencianet_transacao.criar(lst_transacao: ISuperObject; out HTTP_code: integer): string;
+begin
+  HTTP_code:=request('post', '/v1/charge', lst_transacao.AsJSon, Result);
 end;
 
 end.

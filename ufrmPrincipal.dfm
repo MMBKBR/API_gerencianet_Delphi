@@ -3,7 +3,7 @@ object frmPrincipal: TfrmPrincipal
   Top = 0
   Caption = 'API gerenciaNet'
   ClientHeight = 713
-  ClientWidth = 958
+  ClientWidth = 1017
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
@@ -16,7 +16,7 @@ object frmPrincipal: TfrmPrincipal
   object Splitter2: TSplitter
     Left = 0
     Top = 486
-    Width = 958
+    Width = 1017
     Height = 3
     Cursor = crVSplit
     Align = alBottom
@@ -26,42 +26,39 @@ object frmPrincipal: TfrmPrincipal
   object Panel1: TPanel
     Left = 0
     Top = 489
-    Width = 958
+    Width = 1017
     Height = 224
     Align = alBottom
     TabOrder = 0
-    ExplicitTop = 280
-    ExplicitWidth = 855
+    ExplicitWidth = 958
     object Label3: TLabel
       Left = 1
       Top = 1
-      Width = 956
-      Height = 16
+      Width = 1015
+      Height = 13
       Align = alTop
       Caption = 'Log'
-      ExplicitWidth = 745
+      ExplicitWidth = 17
     end
     object memo_log: TMemo
       Left = 1
-      Top = 17
-      Width = 956
-      Height = 206
+      Top = 14
+      Width = 1015
+      Height = 209
       Align = alClient
       ScrollBars = ssVertical
       TabOrder = 0
-      ExplicitTop = 14
-      ExplicitWidth = 745
-      ExplicitHeight = 103
+      ExplicitWidth = 956
     end
   end
   object Panel2: TPanel
     Left = 0
     Top = 0
-    Width = 958
+    Width = 1017
     Height = 65
     Align = alTop
     TabOrder = 1
-    ExplicitWidth = 665
+    ExplicitWidth = 958
     object Label1: TLabel
       Left = 8
       Top = 8
@@ -82,7 +79,6 @@ object frmPrincipal: TfrmPrincipal
       Width = 297
       Height = 21
       TabOrder = 0
-      Text = 'Client_Id_86569dcffd3efb9e93c97779e07b2aa34419b95a'
     end
     object edt_client_secret: TEdit
       Left = 311
@@ -90,7 +86,6 @@ object frmPrincipal: TfrmPrincipal
       Width = 314
       Height = 21
       TabOrder = 1
-      Text = 'Client_Secret_a41bafe3bbd9c145c8367c953e432f9800029a69'
     end
     object Button1: TButton
       Left = 631
@@ -101,17 +96,87 @@ object frmPrincipal: TfrmPrincipal
       TabOrder = 2
       OnClick = Button1Click
     end
+    object rg_ambiente: TRadioGroup
+      Left = 744
+      Top = 10
+      Width = 233
+      Height = 50
+      Caption = 'Ambiente'
+      Columns = 2
+      ItemIndex = 0
+      Items.Strings = (
+        'Desenvolvimento'
+        'Produ'#231#227'o')
+      TabOrder = 3
+    end
   end
   object Panel3: TPanel
     Left = 0
     Top = 65
-    Width = 958
+    Width = 1017
     Height = 421
     Align = alClient
     TabOrder = 2
-    ExplicitLeft = 256
-    ExplicitTop = 224
-    ExplicitWidth = 185
-    ExplicitHeight = 41
+    ExplicitWidth = 958
+    object PageControl1: TPageControl
+      Left = 1
+      Top = 1
+      Width = 1015
+      Height = 419
+      ActivePage = tab_transacao
+      Align = alClient
+      TabOrder = 0
+      ExplicitWidth = 956
+      object tab_transacao: TTabSheet
+        Caption = 'Transa'#231#227'o'
+        ExplicitWidth = 281
+        ExplicitHeight = 165
+        object pgTransacao: TPageControl
+          Left = 0
+          Top = 0
+          Width = 1007
+          Height = 391
+          ActivePage = tab_transacao_criar
+          Align = alClient
+          TabOrder = 0
+          ExplicitTop = 3
+          ExplicitWidth = 620
+          ExplicitHeight = 294
+          object tab_transacao_criar: TTabSheet
+            Caption = 'Criar'
+            ExplicitLeft = 28
+            ExplicitTop = 16
+            ExplicitWidth = 612
+            ExplicitHeight = 266
+            object Button2: TButton
+              Left = 312
+              Top = 48
+              Width = 75
+              Height = 25
+              Caption = 'Criar'
+              TabOrder = 0
+              OnClick = Button2Click
+            end
+            object memo_trancacao_criar: TMemo
+              Left = 16
+              Top = 24
+              Width = 273
+              Height = 289
+              Lines.Strings = (
+                '{'
+                '  "items": ['
+                '    {'
+                '      "name": "Servi'#231'o de limpeza",'
+                '      "value": 800,'
+                '      "amount": 1'
+                '    }'
+                '  ]'
+                '}')
+              TabOrder = 1
+            end
+          end
+        end
+      end
+    end
   end
 end
