@@ -20,7 +20,9 @@ Type
   TApi_gerencianet_transacao = class(TApi_gerencianet_autorizacao)
   private
   public
-    function criar(lst_transacao:ISuperObject; out HTTP_code:integer):string;
+    function criar(sJSON:string; out HTTP_code:integer):string;
+    function obter(chargeID:string; out HTTP_code:integer):string;
+    function metadata(chargeID: string; sJSON:string; out HTTP_code:integer):string;
   end;
 
 implementation
@@ -40,7 +42,7 @@ begin
   http_client := TWinHttp.Create(fServidor, '443', true);
   try
     code:=http_client.Request('/v1/authorize', 'post', 10, auth,'{"grant_type":"client_credentials"}', 'application/json', outHeader, outContent);
-    jContent:=SO(outContent);
+    jContent:=SO(UTF8Decode(outContent));
     if (assigned(jContent)) and (jContent.S['access_token'] <> '') then
       Result:=jContent.S['token_type']+' '+jContent.S['access_token']
     else
@@ -68,13 +70,12 @@ var
   http_client: TWinHttp;
   outHeader, inHeader:SockString;
   outc:SockString;
-  jContent:ISuperObject;
 begin
   inHeader:='Authorization:'+obter_token_autorizacao;
   http_client := TWinHttp.Create(fServidor, '443', true);
   try
     Result:=http_client.Request(url, metodo, 10, inHeader, body, 'application/json', outHeader, outc);
-    outContent:=outc;
+    outContent:=UTF8Decode(outc);
   finally
     http_client.Free;
   end;
@@ -82,9 +83,19 @@ end;
 
 { TApi_gerencianet_transacao }
 
-function TApi_gerencianet_transacao.criar(lst_transacao: ISuperObject; out HTTP_code: integer): string;
+function TApi_gerencianet_transacao.criar(sJSON: string; out HTTP_code: integer): string;
 begin
-  HTTP_code:=request('post', '/v1/charge', lst_transacao.AsJSon, Result);
+  HTTP_code:=request('post', '/v1/charge', sJSON, Result);
+end;
+
+function TApi_gerencianet_transacao.metadata(chargeID: string; sJSON: string; out HTTP_code: integer): string;
+begin
+  HTTP_code:=request('PUT', '/v1/charge/'+chargeID+'/metadata', sJSON, Result);
+end;
+
+function TApi_gerencianet_transacao.obter(chargeID: string; out HTTP_code: integer): string;
+begin
+  HTTP_code:=request('get', '/v1/charge/'+chargeID, '', Result);
 end;
 
 end.

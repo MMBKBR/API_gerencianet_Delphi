@@ -15,7 +15,7 @@ object frmPrincipal: TfrmPrincipal
   TextHeight = 13
   object Splitter2: TSplitter
     Left = 0
-    Top = 486
+    Top = 411
     Width = 1017
     Height = 3
     Cursor = crVSplit
@@ -25,12 +25,11 @@ object frmPrincipal: TfrmPrincipal
   end
   object Panel1: TPanel
     Left = 0
-    Top = 489
+    Top = 414
     Width = 1017
-    Height = 224
+    Height = 299
     Align = alBottom
     TabOrder = 0
-    ExplicitWidth = 958
     object Label3: TLabel
       Left = 1
       Top = 1
@@ -44,11 +43,12 @@ object frmPrincipal: TfrmPrincipal
       Left = 1
       Top = 14
       Width = 1015
-      Height = 209
+      Height = 284
       Align = alClient
       ScrollBars = ssVertical
       TabOrder = 0
       ExplicitWidth = 956
+      ExplicitHeight = 209
     end
   end
   object Panel2: TPanel
@@ -114,19 +114,19 @@ object frmPrincipal: TfrmPrincipal
     Left = 0
     Top = 65
     Width = 1017
-    Height = 421
+    Height = 346
     Align = alClient
     TabOrder = 2
-    ExplicitWidth = 958
+    ExplicitHeight = 421
     object PageControl1: TPageControl
       Left = 1
       Top = 1
       Width = 1015
-      Height = 419
+      Height = 344
       ActivePage = tab_transacao
       Align = alClient
       TabOrder = 0
-      ExplicitWidth = 956
+      ExplicitHeight = 419
       object tab_transacao: TTabSheet
         Caption = 'Transa'#231#227'o'
         ExplicitWidth = 281
@@ -135,22 +135,27 @@ object frmPrincipal: TfrmPrincipal
           Left = 0
           Top = 0
           Width = 1007
-          Height = 391
+          Height = 316
           ActivePage = tab_transacao_criar
           Align = alClient
           TabOrder = 0
-          ExplicitTop = 3
-          ExplicitWidth = 620
-          ExplicitHeight = 294
+          ExplicitHeight = 391
           object tab_transacao_criar: TTabSheet
             Caption = 'Criar'
             ExplicitLeft = 28
             ExplicitTop = 16
             ExplicitWidth = 612
             ExplicitHeight = 266
+            object Label4: TLabel
+              Left = 392
+              Top = 5
+              Width = 44
+              Height = 13
+              Caption = 'chargeID'
+            end
             object Button2: TButton
-              Left = 312
-              Top = 48
+              Left = 302
+              Top = 24
               Width = 75
               Height = 25
               Caption = 'Criar'
@@ -161,7 +166,7 @@ object frmPrincipal: TfrmPrincipal
               Left = 16
               Top = 24
               Width = 273
-              Height = 289
+              Height = 233
               Lines.Strings = (
                 '{'
                 '  "items": ['
@@ -174,6 +179,54 @@ object frmPrincipal: TfrmPrincipal
                 '}')
               TabOrder = 1
             end
+            object btn_transacao_comando: TButton
+              Left = 605
+              Top = 22
+              Width = 75
+              Height = 25
+              Caption = 'Executar'
+              TabOrder = 2
+              OnClick = btn_transacao_comandoClick
+            end
+            object edt_chargeID: TEdit
+              Left = 392
+              Top = 24
+              Width = 201
+              Height = 21
+              TabOrder = 3
+            end
+            object rg_transacao_comando: TRadioGroup
+              Left = 392
+              Top = 64
+              Width = 185
+              Height = 201
+              Caption = 'Comando'
+              ItemIndex = 0
+              Items.Strings = (
+                'get'
+                'metadata'
+                'billet'
+                'cancel'
+                'pay'
+                'billet/resend'
+                'history')
+              TabOrder = 4
+              OnClick = rg_transacao_comandoClick
+            end
+            object memo_transacao_json: TMemo
+              Left = 608
+              Top = 72
+              Width = 257
+              Height = 193
+              TabOrder = 5
+            end
+          end
+          object TabSheet1: TTabSheet
+            Caption = 'TabSheet1'
+            ImageIndex = 1
+            ExplicitLeft = -60
+            ExplicitTop = 0
+            ExplicitHeight = 363
           end
         end
       end
