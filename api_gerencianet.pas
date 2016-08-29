@@ -23,6 +23,11 @@ Type
     function criar(sJSON:string; out HTTP_code:integer):string;
     function obter(chargeID:string; out HTTP_code:integer):string;
     function metadata(chargeID: string; sJSON:string; out HTTP_code:integer):string;
+    function billet(chargeID: string; sJSON:string; out HTTP_code:integer):string;
+    function cancel(chargeID:string; out HTTP_code:integer):string;
+    function pay(chargeID: string; sJSON:string; out HTTP_code:integer):string;
+    function resend(chargeID: string; sJSON:string; out HTTP_code:integer):string;
+    function history(chargeID: string; sJSON:string; out HTTP_code:integer):string;
   end;
 
 implementation
@@ -74,7 +79,7 @@ begin
   inHeader:='Authorization:'+obter_token_autorizacao;
   http_client := TWinHttp.Create(fServidor, '443', true);
   try
-    Result:=http_client.Request(url, metodo, 10, inHeader, body, 'application/json', outHeader, outc);
+    Result:=http_client.Request(url, metodo, 10, inHeader, UTF8Encode(body), 'application/json', outHeader, outc);
     outContent:=UTF8Decode(outc);
   finally
     http_client.Free;
@@ -83,9 +88,24 @@ end;
 
 { TApi_gerencianet_transacao }
 
+function TApi_gerencianet_transacao.billet(chargeID, sJSON: string; out HTTP_code: integer): string;
+begin
+  HTTP_code:=request('PUT', '/v1/charge/'+chargeID+'/billet', sJSON, Result);
+end;
+
+function TApi_gerencianet_transacao.cancel(chargeID: string; out HTTP_code: integer): string;
+begin
+  HTTP_code:=request('PUT', '/v1/charge/'+chargeID+'/cancel', '', Result);
+end;
+
 function TApi_gerencianet_transacao.criar(sJSON: string; out HTTP_code: integer): string;
 begin
-  HTTP_code:=request('post', '/v1/charge', sJSON, Result);
+  HTTP_code:=request('POST', '/v1/charge', sJSON, Result);
+end;
+
+function TApi_gerencianet_transacao.history(chargeID, sJSON: string; out HTTP_code: integer): string;
+begin
+  HTTP_code:=request('POST', '/v1/charge/'+chargeID+'/history', sJSON, Result);
 end;
 
 function TApi_gerencianet_transacao.metadata(chargeID: string; sJSON: string; out HTTP_code: integer): string;
@@ -95,7 +115,17 @@ end;
 
 function TApi_gerencianet_transacao.obter(chargeID: string; out HTTP_code: integer): string;
 begin
-  HTTP_code:=request('get', '/v1/charge/'+chargeID, '', Result);
+  HTTP_code:=request('GET', '/v1/charge/'+chargeID, '', Result);
+end;
+
+function TApi_gerencianet_transacao.pay(chargeID, sJSON: string; out HTTP_code: integer): string;
+begin
+  HTTP_code:=request('POST', '/v1/charge/'+chargeID+'/pay', sJSON, Result);
+end;
+
+function TApi_gerencianet_transacao.resend(chargeID, sJSON: string; out HTTP_code: integer): string;
+begin
+  HTTP_code:=request('POST', '/v1/charge/'+chargeID+'/billet/resend', sJSON, Result);
 end;
 
 end.

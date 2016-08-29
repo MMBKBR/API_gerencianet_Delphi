@@ -59,32 +59,39 @@ begin
     rg_ambiente.ItemIndex = 0);
   try
     case rg_transacao_comando.ItemIndex of
-      0:
+      0: // get
         begin
           resposta := SO(transacao.obter(edt_chargeID.Text, r)).AsJSon(true, false);
         end;
-      1:
+      1: // metadata
         begin
           resposta := SO(transacao.metadata(edt_chargeID.Text, memo_transacao_json.Lines.Text, r)).AsJSon(true, false);
         end;
-      2:
+      2: // billet
         begin
+          resposta := SO(transacao.billet(edt_chargeID.Text, memo_transacao_json.Lines.Text, r)).AsJSon(true, false);
         end;
-      3:
+      3: // cancel
         begin
+          resposta := SO(transacao.cancel(edt_chargeID.Text, r)).AsJSon(true, false);
         end;
-      4:
+      4: // pay
         begin
+          resposta := SO(transacao.pay(edt_chargeID.Text, memo_transacao_json.Lines.Text, r)).AsJSon(true, false);
         end;
-      5:
+      5: // billet/resend
         begin
+          resposta := SO(transacao.resend(edt_chargeID.Text, memo_transacao_json.Lines.Text, r)).AsJSon(true, false);
         end;
-      6:
+      6: // history
         begin
+          resposta := SO(transacao.history(edt_chargeID.Text, memo_transacao_json.Lines.Text, r)).AsJSon(true, false);
         end;
     end;
     memo_log.Lines.Add('enviando comando..');
     memo_log.Lines.Add(Format('resposta: %s', [resposta]));
+    memo_log.Lines.Add('--------------------------------------------');
+    memo_log.Lines.Add('');
   finally
     transacao.Free;
   end;
@@ -121,15 +128,23 @@ end;
 procedure TfrmPrincipal.rg_transacao_comandoClick(Sender: TObject);
 begin
   case rg_transacao_comando.ItemIndex of
-  0:memo_transacao_json.Lines.Clear;
-  1:memo_transacao_json.Lines.Text:=so('{"notification_url": "","custom_id": ""}').AsJSon(true, false);
-  2:memo_transacao_json.Lines.Text:=so('{"expire_at": ""}').AsJSon(true, false);
-  3:memo_transacao_json.Lines.Clear;
-  4:memo_transacao_json.Lines.Text:=so('{"payment": {"credit_card": {"customer": {"name": "","cpf": "","email": "","birth": "",'+
-      '"phone_number": ""},"installments": 1,"payment_token": "","billing_address": {"street": "","number": 0,"neighborhood": '+
-      '"","zipcode": "","city": "","complement": "","state": ""}}}}').AsJSon(true, false);
-  5:memo_transacao_json.Lines.Text:=so('{"email": ""}').AsJSon(true, false);
-  6:memo_transacao_json.Lines.Text:=so('{"description": ""}').AsJSon(true, false);
+    0:
+      memo_transacao_json.Lines.Clear;
+    1:
+      memo_transacao_json.Lines.Text := SO('{"notification_url": "","custom_id": ""}').AsJSon(true, false);
+    2:
+      memo_transacao_json.Lines.Text := SO('{"expire_at": ""}').AsJSon(true, false);
+    3:
+      memo_transacao_json.Lines.Clear;
+    4:
+      memo_transacao_json.Lines.Text :=
+        SO('{"payment": {"credit_card": {"customer": {"name": "","cpf": "","email": "","birth": "",' +
+        '"phone_number": ""},"installments": 1,"payment_token": "","billing_address": {"street": "","number": 0,"neighborhood": '
+        + '"","zipcode": "","city": "","complement": "","state": ""}}}}').AsJSon(true, false);
+    5:
+      memo_transacao_json.Lines.Text := SO('{"email": ""}').AsJSon(true, false);
+    6:
+      memo_transacao_json.Lines.Text := SO('{"description": ""}').AsJSon(true, false);
   end;
 end;
 
